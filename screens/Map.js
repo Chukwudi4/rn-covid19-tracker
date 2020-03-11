@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from "react-native-maps";
 import { fetchLatest } from "../util/databank";
 import { report } from "../stores/recordStores";
 import { Fab, Icon } from "native-base";
+import {observer} from 'mobx-react'
 import {
   widthPercentageToDP as w,
   heightPercentageToDP as h
@@ -24,8 +25,8 @@ function CustomCallout({ confirmed, deaths, recovered, title, style, provincesta
   );
 }
 
-export function Map() {
-  const [loading, setLoading] = useState(true);
+export const Map= observer(()=> {
+  const [isLoading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
   let mapRef = useRef(null);
 
@@ -37,8 +38,8 @@ export function Map() {
       {
         latitude: latest[count].location.lat,
         longitude: latest[count].location.lng,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 10,
+        longitudeDelta: 10
       },
       500
     );
@@ -50,8 +51,8 @@ export function Map() {
       {
         latitude: report.latest[count + 1].location.lat,
         longitude: report.latest[count + 1].location.lng,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 10,
+        longitudeDelta: 10
       },
       500
     );
@@ -62,6 +63,16 @@ export function Map() {
     loadLatest();
   }, [a]);
 
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.container}>
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <MapView
@@ -71,8 +82,8 @@ export function Map() {
         initialRegion={{
           latitude: 37.78825,
           longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
+          latitudeDelta: 10,
+          longitudeDelta: 10
         }}
       >
         {report.latest.map((item, index) => {
@@ -109,7 +120,7 @@ export function Map() {
       </Fab>
     </View>
   );
-}
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -127,10 +138,10 @@ const styles = StyleSheet.create({
   subView: {
     position: 'absolute',
     bottom: w(5),
-    right: w(5),
     left: w(5),
     backgroundColor: '#fff',
-    width: w(50),
+    padding: w(2),
+    width: undefined,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: w(2),
