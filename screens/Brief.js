@@ -8,16 +8,19 @@ import {
 } from "react-native-responsive-screen";
 import { report } from "../stores/recordStores";
 import { colors } from "../config/keys";
+import { Fab, Icon } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 const a = 0;
 export const Brief = observer(() => {
   let [isLoading, setLoading] = useState(true);
+  let navigation = useNavigation()
 
   useEffect(() => {
     loadBrief();
   }, [a]);
 
   async function loadBrief() {
-    setLoading(false);
+    setLoading(true);
     let brief = await fetchBrief();
     report.brief = brief;
     console.log(rHeight());
@@ -78,6 +81,9 @@ export const Brief = observer(() => {
           {report.brief.deaths} death cases
         </Text>
       </View>
+      <Fab position='bottomRight' onPress={()=> navigation.navigate('Map')} >
+        <Icon type='MaterialIcons' name="map" />
+      </Fab>
     </View>
   );
 });
