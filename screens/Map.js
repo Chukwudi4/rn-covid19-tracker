@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Modal } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { fetchLatest } from "../util/databank";
 import { report } from "../stores/recordStores";
@@ -10,6 +10,7 @@ import {
   heightPercentageToDP as h
 } from "react-native-responsive-screen";
 import { CUSTOM_MAPSTYLE } from "../config/mapstyle";
+import { TextInput, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const a = 1;
 
@@ -28,12 +29,15 @@ function CustomCallout({ confirmed, deaths, recovered, title, style, provincesta
 export const Map= observer(()=> {
   const [isLoading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
+  const [modal, setModal] = useState(false)
+  const [results, setResults] = useState([])
   let mapRef = useRef(null);
 
   async function loadLatest() {
-    setLoading(false);
+    setLoading(true);
     let latest = await fetchLatest();
     report.latest = latest;
+    setLoading(false);
     mapRef.current.animateToRegion(
       {
         latitude: latest[count].location.lat,
@@ -43,7 +47,22 @@ export const Map= observer(()=> {
       },
       500
     );
-    setLoading(false);
+    
+  }
+
+  function searchCity(country) {
+
+    if(country.length < 2){
+      return ;
+    }
+
+    for (let index = 0; index < report.latest.length; index++) {
+      if (report.latest[index].countryregion.search(country) != -1) {
+        results.push({city: report.latest[index], index: index})
+        setResults(results);
+      }
+    }
+
   }
 
   function nextMarker() {
@@ -63,18 +82,35 @@ export const Map= observer(()=> {
     loadLatest();
   }, [a]);
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.container}>
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      </View>
-    );
-  }
+  
 
   return (
     <View style={styles.container}>
+      {/* <Modal
+        visible={true}
+      >
+        <View>
+          <View style={styles.searchView} >
+            <TextInput onChangeText={text=> searchCity(text)} style={styles.searchInput} maxLength={15} placeholder="Search for a city" />
+          </View>
+          {
+            results.map(item=> {
+              let temp = item.city.provincestate === "" ? item.city.countryregion : `${item.city.provincestate}, ${item.city.countryregion}`
+              return (
+                <TouchableWithoutFeedback>
+                  <View>
+                    <Text>{temp}</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )
+            })
+          }
+        </View>
+      </Modal> */}
+      
+{/*       <View style={styles.searchView} >
+        <TextInput onChangeText={text=> searchCity(text)} style={styles.searchInput} maxLength={15} placeholder="Search for a city" />
+      </View> */}
       <MapView
         style={styles.container}
         ref={mapRef}
@@ -118,6 +154,9 @@ export const Map= observer(()=> {
       <Fab onPress={() => nextMarker()} position="bottomRight">
         <Icon type="MaterialIcons" name="navigate-next" color="#fff" />
       </Fab>
+      <Fab onPress={() => loadLatest()} position="topRight">
+        <Icon type="MaterialIcons" name="refresh" color="#fff" />
+      </Fab>
     </View>
   );
 })
@@ -134,6 +173,27 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     marginBottom: w(2)
+  },
+  searchView: {
+    width: w(80),
+    top: h(15),
+    borderRadius: w(1),
+    alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 4,
+    position: "absolute",
+    backgroundColor: '#fff',
+    zIndex: 1221
+  },
+  searchInput: {
+    fontSize: w(5),
+    color: "#000",
+    width: w(75),
+    margin: w(3),
+    
   },
   subView: {
     position: 'absolute',
