@@ -7,9 +7,9 @@ export async function fetchBrief() {
     return cases;
 }
 
-export async function fetchBrief() {
+export async function fetchLatest() {
     const newCases = await fetch(`${URL}jhu-edu/latest`, config)
     const cases = await newCases.json();
-    console.warn(cases);
+    //console.warn(cases);
     return cases;
 }
