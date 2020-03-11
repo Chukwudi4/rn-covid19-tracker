@@ -158,7 +158,7 @@ export const Map= observer(()=> {
       <Fab onPress={() => nextMarker()} position="bottomRight">
         <Icon type="MaterialIcons" name="navigate-next" color="#fff" />
       </Fab>
-      <Fab onPress={() => loadLatest()} position="topRight">
+      <Fab onPress={() => loadLatest()} position="bottomLeft">
         <Icon type="MaterialIcons" name="refresh" color="#fff" />
       </Fab>
     </View>
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   },
   subView: {
     position: 'absolute',
-    bottom: w(5),
+    top: w(15),
     left: w(5),
     backgroundColor: '#fff',
     padding: w(2),
