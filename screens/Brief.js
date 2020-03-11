@@ -51,7 +51,17 @@ export const Brief = observer(() => {
       <View
         style={[
           styles.container,
-          { height: h(94), backgroundColor: colors["recovered"] }
+          { height: h(33.3), backgroundColor: colors["confirmed"] }
+        ]}
+      >
+        <Text style={[styles.loadingText, { color: "#fff" }]}>
+          {report.brief.confirmed} confirmed cases
+        </Text>
+      </View>
+      <View
+        style={[
+          styles.container,
+          { height: h(33.3), backgroundColor: colors["recovered"] }
         ]}
       >
         <Text style={[styles.loadingText, { color: "#fff" }]}>
@@ -61,7 +71,7 @@ export const Brief = observer(() => {
       <View
         style={[
           styles.container,
-          { height: h(6), backgroundColor: colors["deaths"] }
+          { height: h(33.3), backgroundColor: colors["deaths"] }
         ]}
       >
         <Text style={[styles.loadingText, { color: "#fff" }]}>
