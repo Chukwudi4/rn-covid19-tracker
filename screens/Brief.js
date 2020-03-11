@@ -41,12 +41,20 @@ export const Brief = observer(() => {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-        <View style={styles.container}>
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
+      <View style={[styles.container, {flex: 1}]}>
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
+  }
+
+  if( typeof report.brief === undefined){
+    return (
+      <View style={[styles.container, {flex: 1}]}>
+        <Fab onPress={() => loadBrief()} position="bottomLeft">
+        <Icon type="MaterialIcons" name="refresh" color="#fff" />
+      </Fab>
+      </View>
+    )
   }
 
   return (
@@ -84,6 +92,9 @@ export const Brief = observer(() => {
       <Fab position='bottomRight' onPress={()=> navigation.navigate('Map')} >
         <Icon type='MaterialIcons' name="map" />
       </Fab>
+      <Fab onPress={() => loadBrief()} position="bottomLeft">
+        <Icon type="MaterialIcons" name="refresh" color="#fff" />
+      </Fab>
     </View>
   );
 });
@@ -92,11 +103,12 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f7f0f0",
+    backgroundColor: colors["confirmed"],
     width: w(100)
   },
   loadingText: {
     fontSize: w(5),
-    textAlign: "center"
+    textAlignVertical:"center",
+    color: "#fff"
   }
 });

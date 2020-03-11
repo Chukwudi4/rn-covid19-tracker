@@ -10,6 +10,7 @@ import {
   heightPercentageToDP as h
 } from "react-native-responsive-screen";
 import { CUSTOM_MAPSTYLE } from "../config/mapstyle";
+import Spinner from 'react-native-loading-spinner-overlay'
 import { TextInput, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const a = 1;
@@ -111,6 +112,9 @@ export const Map= observer(()=> {
 {/*       <View style={styles.searchView} >
         <TextInput onChangeText={text=> searchCity(text)} style={styles.searchInput} maxLength={15} placeholder="Search for a city" />
       </View> */}
+      <Spinner
+        visible={isLoading}
+      />
       <MapView
         style={styles.container}
         ref={mapRef}
