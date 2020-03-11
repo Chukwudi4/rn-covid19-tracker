@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "corona-virus",
+    "name": "COVID-19 tracker",
     "slug": "corona-virus",
     "privacy": "public",
     "sdkVersion": "36.0.0",
