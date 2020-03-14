@@ -101,10 +101,10 @@ android {
 
     defaultConfig {
         applicationId "com.covid_tracker"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 28
+        targetSdkVersion 28
+        versionCode 2
+        versionName "1.1"
     }
     splits {
         abi {
@@ -144,12 +144,13 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 dependencies {
-    implementation project(':react-native-screens')
-    implementation project(':react-native-reanimated')
+    implementation project(':react-native-maps')
+    implementation project(':react-native-safe-area-context')
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     addUnimodulesDependencies()
 
     if (enableHermes) {
