@@ -11,6 +11,7 @@ import {
 } from "react-native-responsive-screen";
 import { CUSTOM_MAPSTYLE } from "../config/mapstyle";
 import Spinner from 'react-native-loading-spinner-overlay'
+import {useNavigation} from '@react-navigation/native'
 import { TextInput, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const a = 1;
@@ -32,6 +33,7 @@ export const Map= observer(()=> {
   const [count, setCount] = useState(0);
   const [modal, setModal] = useState(false)
   const [results, setResults] = useState([])
+  const navigation = useNavigation()
   let mapRef = useRef(null);
 
   async function loadLatest() {
@@ -81,9 +83,14 @@ export const Map= observer(()=> {
 
   useEffect(() => {
     loadLatest();
+    clearResult();
   }, [a]);
 
-  
+  function clearResult() {
+    navigation.addListener('blur', ()=> {
+      report.latest = []
+    })
+  }
 
   return (
     <View style={styles.container}>
